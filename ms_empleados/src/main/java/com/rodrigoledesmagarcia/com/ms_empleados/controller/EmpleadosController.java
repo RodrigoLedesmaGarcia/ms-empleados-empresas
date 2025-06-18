@@ -1,9 +1,11 @@
 package com.rodrigoledesmagarcia.com.ms_empleados.controller;
 
+import com.rodrigoledesmagarcia.com.ms_empleados.clients.EmpresaFeign;
 import com.rodrigoledesmagarcia.com.ms_empleados.entity.Empleado;
 import com.rodrigoledesmagarcia.com.ms_empleados.exception.HandlerApiException;
-import com.rodrigoledesmagarcia.com.ms_empleados.service.EmpleadoService;
+import com.rodrigoledesmagarcia.com.ms_empleados.pojo.Empresa;
 import com.rodrigoledesmagarcia.com.ms_empleados.service.EmpleadoServiceImpl;
+import feign.FeignException;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +23,11 @@ import java.util.Optional;
 public class EmpleadosController {
 
     private final EmpleadoServiceImpl service;
-    private final EmpleadoService empleadoService;
+    private final EmpresaFeign empresaClient;
 
-    public EmpleadosController(EmpleadoServiceImpl service, EmpleadoService empleadoService) {
+    public EmpleadosController(EmpleadoServiceImpl service, EmpresaFeign empresaClient) {
         this.service = service;
-        this.empleadoService = empleadoService;
+        this.empresaClient = empresaClient;
     }
 
 
@@ -116,6 +118,18 @@ public class EmpleadosController {
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "empleado eliminado"));
         } else {
             return HandlerApiException.notFound("empleado no encontrado");
+        }
+    }
+
+    @GetMapping("/empresa/{id}")
+    public ResponseEntity<?> buscarEmpresaPorId(@PathVariable Long id) {
+        try {
+            Empresa empresa = empresaClient.buscarEmpresaPorId(id);
+            return ResponseEntity.ok(empresa);
+        } catch (FeignException.NotFound e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empresa no encontrada con id: " + id);
+        } catch (FeignException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al consultar la empresa");
         }
     }
 } // clase controller
