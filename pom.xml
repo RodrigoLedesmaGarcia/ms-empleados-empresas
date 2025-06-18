@@ -23,7 +23,6 @@
     </properties>
 
     <modules>
-        <module>api-gateway</module>
         <module>eureka-server</module>
         <module>ms_empleados</module>
         <module>ms-empresas</module>
