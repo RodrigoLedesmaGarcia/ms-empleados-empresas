@@ -59,7 +59,7 @@ public class EmpresaController {
         if (empresaId.isPresent()){
             return ResponseEntity.ok(empresaId.get());
         } else {
-            return HandlerException.notFound("404 not found : no se encontro al empleado con el id: "+id);
+            return HandlerException.notFound("404 not found : no se encontro la empresa con el id: "+id);
         }
     }
 
