@@ -2,7 +2,7 @@ spring:
   application:
     name: ms_empleados
   datasource:
-    url: jdbc:postgresql://host.docker.internal:5432/empleadosDB
+    url: jdbc:postgresql://localhost:5432/empleadosDB
     username: postgres
     password: 12345
     driver-class-name: org.postgresql.Driver
@@ -20,9 +20,3 @@ logging:
     org.hibernate.SQL: debug
 server:
   port: 8600
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://host.docker.internal:8761/eureka/
-
